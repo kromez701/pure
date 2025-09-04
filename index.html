@@ -14595,4 +14595,336 @@
       <!-- END app snippet -->
     </div>
   </body>
+
+  <!-- <script>
+    // Add to Cart Redirect Handler
+    // This script handles redirects based on selected purchase options
+
+    (function () {
+      // Configuration - Update these URLs as needed
+      const REDIRECT_URLS = {
+        subscription: "/checkout/subscription", // URL for subscription option
+        oneTime: "/checkout/one-time", // URL for one-time purchase
+      };
+
+      // Price configuration
+      const PRICES = {
+        subscription: 39.9,
+        oneTime: 54.9,
+      };
+
+      // Function to update displayed prices
+      function updatePrices() {
+        // Update subscription price
+        const subscriptionPriceElements = document.querySelectorAll(
+          ".appstle_subscription_amount"
+        );
+        subscriptionPriceElements.forEach((element) => {
+          if (element.textContent.includes("£")) {
+            element.textContent = `£${PRICES.subscription}`;
+          }
+        });
+
+        // Update one-time purchase price
+        const oneTimePriceElements = document.querySelectorAll(
+          ".appstle_one_time_price_wrapper .appstle_subscription_amount"
+        );
+        oneTimePriceElements.forEach((element) => {
+          if (element.textContent.includes("£")) {
+            element.textContent = `£${PRICES.oneTime}`;
+          }
+        });
+      }
+
+      // Function to get currently selected option
+      function getSelectedOption() {
+        // Check subscription radio button
+        const subscriptionRadio = document.querySelector(
+          'input[name="selling_plan"][value="694877487449"]'
+        );
+        const oneTimeRadio = document.querySelector(
+          'input[name="selling_plan"][value=""]'
+        );
+
+        if (subscriptionRadio && subscriptionRadio.checked) {
+          return "subscription";
+        } else if (oneTimeRadio && oneTimeRadio.checked) {
+          return "oneTime";
+        }
+
+        // Fallback: check by radio button IDs
+        const subscriptionById = document.getElementById(
+          "appstle_selling_plan_label_20"
+        );
+        const oneTimeById = document.getElementById(
+          "appstle_selling_plan_label_10"
+        );
+
+        if (
+          subscriptionById &&
+          subscriptionById.previousElementSibling.checked
+        ) {
+          return "subscription";
+        } else if (oneTimeById && oneTimeById.previousElementSibling.checked) {
+          return "oneTime";
+        }
+
+        // Default to subscription if nothing is detected
+        return "subscription";
+      }
+
+      // Function to handle add to cart click
+      function handleAddToCart(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const selectedOption = getSelectedOption();
+        const redirectUrl = REDIRECT_URLS[selectedOption];
+
+        console.log("Selected option:", selectedOption);
+        console.log("Redirecting to:", redirectUrl);
+
+        // Always redirect regardless of selection
+        if (redirectUrl) {
+          window.location.href = redirectUrl;
+        } else {
+          // Fallback redirect if URL not found
+          console.warn("Redirect URL not found for option:", selectedOption);
+          window.location.href = REDIRECT_URLS.subscription; // Default to subscription
+        }
+      }
+
+      // Function to initialize the script
+      function init() {
+        // Update prices on page load
+        updatePrices();
+
+        // Find and attach event listener to add to cart button
+        const addToCartButton = document.querySelector(
+          'button.button--xl[is="custom-button"]'
+        );
+
+        if (addToCartButton) {
+          // Remove any existing event listeners
+          addToCartButton.removeEventListener("click", handleAddToCart);
+
+          // Add new event listener
+          addToCartButton.addEventListener("click", handleAddToCart);
+
+          console.log("Add to cart redirect handler initialized successfully");
+        } else {
+          console.error("Add to cart button not found");
+        }
+
+        // Also listen for changes in radio button selection to update prices
+        const radioButtons = document.querySelectorAll(
+          'input[name="selling_plan"]'
+        );
+        radioButtons.forEach((radio) => {
+          radio.addEventListener("change", function () {
+            updatePrices();
+            console.log("Selection changed to:", getSelectedOption());
+          });
+        });
+      }
+
+      // Initialize when DOM is ready
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
+      }
+
+      // Also initialize after a short delay to ensure all elements are loaded
+      setTimeout(init, 1000);
+
+      // Expose functions globally for debugging
+      window.cartRedirectHandler = {
+        getSelectedOption: getSelectedOption,
+        updatePrices: updatePrices,
+        handleAddToCart: handleAddToCart,
+        init: init,
+      };
+    })();
+  </script> -->
+
+  <script>
+    // Add to Cart Redirect Handler
+    // This script handles redirects based on selected purchase options
+
+    (function () {
+      // Configuration - Update these URLs as needed
+      const REDIRECT_URLS = {
+        subscription: "https://n2kzpa-uw.myshopify.com/cart/52360317272397:1", // URL for subscription option
+        oneTime: "https://n2kzpa-uw.myshopify.com/cart/52360317272397:1", // URL for one-time purchase
+      };
+
+      // Price configuration
+      const PRICES = {
+        subscription: 39.9,
+        oneTime: 54.9,
+      };
+
+      // Function to update displayed prices
+      function updatePrices() {
+        // Update subscription price
+        const subscriptionPriceElements = document.querySelectorAll(
+          ".appstle_subscription_amount"
+        );
+        subscriptionPriceElements.forEach((element) => {
+          if (element.textContent.includes("£")) {
+            element.textContent = `£${PRICES.subscription}`;
+          }
+        });
+
+        // Update one-time purchase price
+        const oneTimePriceElements = document.querySelectorAll(
+          ".appstle_one_time_price_wrapper .appstle_subscription_amount"
+        );
+        oneTimePriceElements.forEach((element) => {
+          if (element.textContent.includes("£")) {
+            element.textContent = `£${PRICES.oneTime}`;
+          }
+        });
+      }
+
+      // Function to get currently selected option
+      function getSelectedOption() {
+        // Check subscription radio button
+        const subscriptionRadio = document.querySelector(
+          'input[name="selling_plan"][value="694877487449"]'
+        );
+        const oneTimeRadio = document.querySelector(
+          'input[name="selling_plan"][value=""]'
+        );
+
+        if (subscriptionRadio && subscriptionRadio.checked) {
+          return "subscription";
+        } else if (oneTimeRadio && oneTimeRadio.checked) {
+          return "oneTime";
+        }
+
+        // Fallback: check by radio button IDs
+        const subscriptionById = document.getElementById(
+          "appstle_selling_plan_label_20"
+        );
+        const oneTimeById = document.getElementById(
+          "appstle_selling_plan_label_10"
+        );
+
+        if (
+          subscriptionById &&
+          subscriptionById.previousElementSibling.checked
+        ) {
+          return "subscription";
+        } else if (oneTimeById && oneTimeById.previousElementSibling.checked) {
+          return "oneTime";
+        }
+
+        // Default to subscription if nothing is detected
+        return "subscription";
+      }
+
+      // Function to handle add to cart click
+      function handleAddToCart(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const selectedOption = getSelectedOption();
+        const redirectUrl = REDIRECT_URLS[selectedOption];
+
+        console.log("Selected option:", selectedOption);
+        console.log("Redirecting to:", redirectUrl);
+
+        // Always redirect regardless of selection
+        if (redirectUrl) {
+          window.location.href = redirectUrl;
+        } else {
+          // Fallback redirect if URL not found
+          console.warn("Redirect URL not found for option:", selectedOption);
+          window.location.href = REDIRECT_URLS.subscription; // Default to subscription
+        }
+      }
+
+      // Function to initialize the script
+      function init() {
+        // Update prices on page load
+        updatePrices();
+
+        // Find and attach event listener to add to cart button
+        const addToCartButton = document.querySelector(
+          'button.button--xl[is="custom-button"]'
+        );
+
+        if (addToCartButton) {
+          // Remove any existing event listeners
+          addToCartButton.removeEventListener("click", handleAddToCart);
+
+          // Add new event listener
+          addToCartButton.addEventListener("click", handleAddToCart);
+
+          console.log("Add to cart redirect handler initialized successfully");
+        } else {
+          console.error("Add to cart button not found");
+        }
+
+        // Also listen for changes in radio button selection to update prices
+        const radioButtons = document.querySelectorAll(
+          'input[name="selling_plan"]'
+        );
+        radioButtons.forEach((radio) => {
+          radio.addEventListener("change", function () {
+            updatePrices();
+            console.log("Selection changed to:", getSelectedOption());
+          });
+        });
+      }
+
+      // Initialize when DOM is ready
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
+      }
+
+      // Also initialize after delays to ensure all elements are loaded
+      setTimeout(init, 500);
+      setTimeout(init, 1500);
+      setTimeout(init, 3000);
+
+      // Add a MutationObserver to reinitialize if the DOM changes
+      const observer = new MutationObserver(function (mutations) {
+        let shouldReinit = false;
+        mutations.forEach(function (mutation) {
+          if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+            mutation.addedNodes.forEach(function (node) {
+              if (
+                node.nodeType === 1 &&
+                (node.classList.contains("button--xl") ||
+                  (node.querySelector && node.querySelector(".button--xl")))
+              ) {
+                shouldReinit = true;
+              }
+            });
+          }
+        });
+
+        if (shouldReinit) {
+          console.log("DOM changed, reinitializing...");
+          setTimeout(init, 100);
+        }
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+
+      // Expose functions globally for debugging
+      window.cartRedirectHandler = {
+        getSelectedOption: getSelectedOption,
+        updatePrices: updatePrices,
+        handleAddToCart: handleAddToCart,
+        init: init,
+      };
+    })();
+  </script>
 </html>
