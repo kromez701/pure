@@ -14811,15 +14811,6 @@
           "appstle_selling_plan_label_10"
         );
 
-        if (
-          subscriptionById &&
-          subscriptionById.previousElementSibling.checked
-        ) {
-          return "subscription";
-        } else if (oneTimeById && oneTimeById.previousElementSibling.checked) {
-          return "oneTime";
-        }
-
         // Default to subscription if nothing is detected
         return "subscription";
       }
