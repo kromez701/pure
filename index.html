@@ -1345,6 +1345,9 @@
       .appstle_subscription_wrapper .appstle-save-badge:empty {
         display: none !important;
       }
+      .appstle_subscription_wrapper_option.appstle_include_dropdown.appstle_selected_background.payAsYouGoPlansDropdownWrapper {
+        display: none !important;
+      }
     </style>
     <!-- BEGIN app block: shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507 -->
 
@@ -14846,7 +14849,7 @@
         );
 
         // Default to subscription if nothing is detected
-        return "subscription";
+        return "oneTime";
       }
 
       // Function to handle add to cart click
@@ -14950,6 +14953,18 @@
         handleAddToCart: handleAddToCart,
         init: init,
       };
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const oneTimeDiv = document.querySelector(
+        ".appstle_subscription_wrapper_option"
+      );
+      console.log("one time div", oneTimeDiv);
+      if (oneTimeDiv) {
+        oneTimeDiv.classList.add("appstle-active-option");
+      }
     })();
   </script>
 
