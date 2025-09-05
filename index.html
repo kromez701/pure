@@ -14806,7 +14806,7 @@
         );
         subscriptionPriceElements.forEach((element) => {
           if (element.textContent.includes("£")) {
-            element.textContent = `£${PRICES.subscription}`;
+            element.textContent = `£${PRICES.subscription}0`;
           }
         });
 
@@ -14816,7 +14816,7 @@
         );
         oneTimePriceElements.forEach((element) => {
           if (element.textContent.includes("£")) {
-            element.textContent = `£${PRICES.oneTime}`;
+            element.textContent = `£${PRICES.oneTime}0`;
           }
         });
       }
