@@ -1345,6 +1345,9 @@
       .appstle_subscription_wrapper .appstle-save-badge:empty {
         display: none !important;
       }
+      .appstle_subscription_amount {
+        visibility: hidden;
+      }
       .appstle_subscription_wrapper_option.appstle_include_dropdown.appstle_selected_background.payAsYouGoPlansDropdownWrapper {
         display: none !important;
       }
@@ -14784,7 +14787,7 @@
     })();
   </script> -->
 
-  <script>
+  <!-- <script>
     // Add to Cart Redirect Handler
     // This script handles redirects based on selected purchase options
 
@@ -14798,7 +14801,7 @@
       // Price configuration
       const PRICES = {
         subscription: 39.9,
-        oneTime: 54.9,
+        oneTime: 39.97,
       };
 
       // Function to update displayed prices
@@ -14819,7 +14822,8 @@
         );
         oneTimePriceElements.forEach((element) => {
           if (element.textContent.includes("£")) {
-            element.textContent = `£${PRICES.oneTime}0`;
+            element.textContent = `£39.97`;
+            element.style.visibility = "visible";
           }
         });
       }
@@ -14852,6 +14856,17 @@
         return "oneTime";
       }
 
+      function preselectOneTime() {
+        const oneTimeRadio = document.querySelector(
+          'input[name="selling_plan"][value=""]'
+        );
+        if (oneTimeRadio) {
+          oneTimeRadio.checked = true;
+          oneTimeRadio.dispatchEvent(new Event("change", { bubbles: true }));
+          console.log("One-time option preselected");
+        }
+      }
+
       // Function to handle add to cart click
       function handleAddToCart(event) {
         event.preventDefault(); // Prevent default form submission
@@ -14876,6 +14891,8 @@
       function init() {
         // Update prices on page load
         updatePrices();
+
+        preselectOneTime();
 
         // Find and attach event listener to add to cart button
         const addToCartButton = document.querySelector(
@@ -14952,19 +14969,217 @@
         updatePrices: updatePrices,
         handleAddToCart: handleAddToCart,
         init: init,
+        preselectOneTime: preselectOneTime,
       };
     })();
-  </script>
+  </script> -->
 
   <script>
+    // Add to Cart Redirect Handler
+    // Handles redirects and ensures the one-time option is preselected and shows £39.97
+
     (function () {
-      const oneTimeDiv = document.querySelector(
-        ".appstle_subscription_wrapper_option"
-      );
-      console.log("one time div", oneTimeDiv);
-      if (oneTimeDiv) {
-        oneTimeDiv.classList.add("appstle-active-option");
+      const REDIRECT_URLS = {
+        subscription: "https://n2kzpa-uw.myshopify.com/cart/52360327397709:1",
+        oneTime: "https://n2kzpa-uw.myshopify.com/cart/52360317272397:1",
+      };
+
+      const PRICES = {
+        subscription: 39.9,
+        oneTime: 39.97,
+      };
+
+      // Update visible prices — always set one-time to £39.97
+      function updatePrices() {
+        // Update subscription price (only for those NOT inside one-time wrapper)
+        const subscriptionPriceElements = document.querySelectorAll(
+          ".appstle_subscription_amount"
+        );
+        subscriptionPriceElements.forEach((element) => {
+          // If this element is inside a one-time wrapper, skip here so one-time logic handles it
+          if (element.closest(".appstle_one_time_price_wrapper")) return;
+          element.textContent = `£${PRICES.subscription.toFixed(2)}`;
+        });
+
+        // Update one-time purchase price — target common possible selectors and ALWAYS set it
+        const oneTimeSelectors = [
+          ".appstle_one_time_price_wrapper .appstle_subscription_amount",
+          ".appstle_one_time_price_wrapper .appstle_price_amount",
+          ".appstle_one_time_price_wrapper .price",
+          ".appstle_one_time_price_wrapper",
+        ];
+        const seen = new Set();
+        oneTimeSelectors.forEach((sel) => {
+          document.querySelectorAll(sel).forEach((el) => {
+            // If the selector returned the wrapper itself (last selector), try to find nested amount nodes
+            if (
+              el.classList &&
+              el.classList.contains("appstle_one_time_price_wrapper")
+            ) {
+              const nested = el.querySelectorAll(
+                ".appstle_subscription_amount, .appstle_price_amount, .price"
+              );
+              nested.forEach((n) => {
+                if (!seen.has(n)) {
+                  n.textContent = `£${PRICES.oneTime.toFixed(2)}`;
+                  n.style.visibility = "visible";
+                  seen.add(n);
+                }
+              });
+            } else {
+              if (!seen.has(el)) {
+                el.textContent = `£${PRICES.oneTime.toFixed(2)}`;
+                el.style.visibility = "visible";
+                seen.add(el);
+              }
+            }
+          });
+        });
       }
+
+      // Returns selected option; defaults to oneTime
+      function getSelectedOption() {
+        const subscriptionRadio = document.querySelector(
+          'input[name="selling_plan"][value="694877487449"]'
+        );
+        const oneTimeRadio = document.querySelector(
+          'input[name="selling_plan"][value=""]'
+        );
+
+        oneTimeRadio.disabled = true;
+
+        if (subscriptionRadio && subscriptionRadio.checked) {
+          return "subscription";
+        } else if (oneTimeRadio && oneTimeRadio.checked) {
+          return "oneTime";
+        }
+
+        return "oneTime";
+      }
+
+      // Preselect one-time and trigger change event (if the radio exists)
+      function preselectOneTime() {
+        const oneTimeRadio = document.querySelector(
+          'input[name="selling_plan"][value=""]'
+        );
+        if (oneTimeRadio) {
+          oneTimeRadio.checked = true;
+          oneTimeRadio.dispatchEvent(new Event("change", { bubbles: true }));
+          console.log("One-time option preselected");
+        }
+      }
+
+      function handleAddToCart(event) {
+        event.preventDefault();
+        const selectedOption = getSelectedOption();
+        const redirectUrl = REDIRECT_URLS[selectedOption];
+        console.log("Selected option:", selectedOption);
+        console.log("Redirecting to:", redirectUrl);
+        if (redirectUrl) {
+          window.location.href = redirectUrl;
+        } else {
+          console.warn("Redirect URL not found for option:", selectedOption);
+          window.location.href = REDIRECT_URLS.oneTime;
+        }
+      }
+
+      // Initialize: preselect one-time, update prices and attach listeners
+      function init() {
+        preselectOneTime();
+        updatePrices();
+
+        const addToCartButton = document.querySelector(
+          'button.button--xl[is="custom-button"]'
+        );
+        if (addToCartButton) {
+          addToCartButton.removeEventListener("click", handleAddToCart);
+          addToCartButton.addEventListener("click", handleAddToCart);
+          console.log("Add to cart redirect handler initialized");
+        } else {
+          console.warn(
+            "Add to cart button not found (will retry on DOM changes)"
+          );
+        }
+
+        // Attach change listeners to radio buttons
+        const radioButtons = document.querySelectorAll(
+          'input[name="selling_plan"]'
+        );
+        radioButtons.forEach((radio) => {
+          radio.removeEventListener("change", onRadioChange);
+          radio.addEventListener("change", onRadioChange);
+        });
+      }
+
+      function onRadioChange() {
+        // keep one-time price fixed when selection changes
+        updatePrices();
+        console.log("Selection changed to:", getSelectedOption());
+      }
+
+      // DOM ready
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
+      }
+
+      // Retry in case elements load after DOMContentLoaded
+      setTimeout(init, 500);
+      setTimeout(init, 1500);
+      setTimeout(init, 3000);
+
+      // Observe DOM for new relevant nodes (price wrappers, selling_plan radios, add-to-cart button)
+      const observer = new MutationObserver(function (mutations) {
+        let shouldReinit = false;
+        mutations.forEach(function (mutation) {
+          if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+            mutation.addedNodes.forEach(function (node) {
+              if (node.nodeType !== 1) return;
+              const hasButton =
+                node.classList && node.classList.contains("button--xl");
+              const containsButton =
+                node.querySelector && node.querySelector(".button--xl");
+              const hasPriceWrapper =
+                node.classList &&
+                node.classList.contains("appstle_one_time_price_wrapper");
+              const containsPriceWrapper =
+                node.querySelector &&
+                node.querySelector(".appstle_one_time_price_wrapper");
+              const containsSellingPlan =
+                node.querySelector &&
+                node.querySelector('input[name="selling_plan"]');
+              if (
+                hasButton ||
+                containsButton ||
+                hasPriceWrapper ||
+                containsPriceWrapper ||
+                containsSellingPlan
+              ) {
+                shouldReinit = true;
+              }
+            });
+          }
+        });
+
+        if (shouldReinit) {
+          console.log(
+            "DOM changed (reinit triggered) — updating prices / listeners"
+          );
+          setTimeout(init, 50);
+        }
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true });
+
+      // Expose for debugging
+      window.cartRedirectHandler = {
+        getSelectedOption,
+        updatePrices,
+        handleAddToCart,
+        init,
+        preselectOneTime,
+      };
     })();
   </script>
 
